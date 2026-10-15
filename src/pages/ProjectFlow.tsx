@@ -155,7 +155,7 @@ export function ProjectFlow() {
 
       {current === 'evenement' && <StepEvent project={project} update={update} />}
       {current === 'materiel' && <StepMaterial project={project} update={update} />}
-      {current === 'prompt' && <StepPrompt project={project} onEdit={() => goTo('evenement')} />}
+      {current === 'prompt' && <StepPrompt project={project} update={update} onEdit={() => goTo('evenement')} />}
 
       <div className="flow-footer">
         <div className="flow-footer-inner">

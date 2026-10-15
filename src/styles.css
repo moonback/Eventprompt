@@ -545,3 +545,30 @@ button.item-photo:hover, .item-photo.drag { border-color: var(--accent); color: 
 
 .spin { animation: spin 0.9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Visuel généré ---------- */
+.render-card { overflow: hidden; }
+.render-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 18px 20px 16px; }
+.render-stage { position: relative; background: var(--surface-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); max-height: 640px; width: 100%; }
+.render-stage img { width: 100%; height: 100%; object-fit: contain; }
+.render-placeholder, .render-loading-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--text-3); font-size: 14px; text-align: center; padding: 16px; }
+.render-placeholder svg { width: 28px; height: 28px; opacity: 0.6; }
+.render-loading { position: absolute; inset: 0; overflow: hidden; }
+.render-loading-text { color: var(--text); }
+.render-shimmer {
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(142, 124, 255, 0.12) 50%, transparent 70%);
+  background-size: 250% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+@keyframes shimmer { from { background-position: 150% 0; } to { background-position: -100% 0; } }
+.render-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 12px 20px; }
+.render-history { display: flex; gap: 8px; padding: 0 20px 16px; overflow-x: auto; }
+.render-thumb { flex-shrink: 0; width: 76px; height: 52px; padding: 0; border-radius: 8px; overflow: hidden; border: 2px solid transparent; background: var(--surface-2); }
+.render-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.render-thumb.on { border-color: var(--accent); }
+.render-empty { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; padding: 28px 20px 32px; border-top: 1px solid var(--line); color: var(--text-2); font-size: 14px; }
+.render-empty p { margin: 0; }
+.render-empty svg { width: 22px; height: 22px; color: var(--text-3); }
+.callout.error { background: rgba(239, 128, 128, 0.08); border-color: rgba(239, 128, 128, 0.3); }
+.callout.error svg { color: var(--danger); }

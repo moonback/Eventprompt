@@ -2,12 +2,16 @@ import { useMemo, useState } from 'react';
 import { AlertTriangle, Check, Copy, Download, Info, PenLine } from 'lucide-react';
 import { useToast } from '../../components/Toast';
 import { buildPrompt } from '../../lib/engine';
+import { useSettings } from '../../lib/settings';
 import type { Project } from '../../lib/types';
 import { copyText, downloadText, slugify } from '../../lib/utils';
+import type { Updater } from '../ProjectFlow';
+import { RenderPanel } from './RenderPanel';
 
-export function StepPrompt({ project, onEdit }: { project: Project; onEdit: () => void }) {
+export function StepPrompt({ project, update, onEdit }: { project: Project; update: Updater; onEdit: () => void }) {
   const result = useMemo(() => buildPrompt(project), [project]);
   const toast = useToast();
+  const { settings } = useSettings();
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -27,31 +31,34 @@ export function StepPrompt({ project, onEdit }: { project: Project; onEdit: () =
 
   return (
     <div className="prompt-layout">
-      <section className="card prompt-card" aria-label="Prompt généré">
-        <div className="prompt-toolbar">
-          <button className="btn btn-primary" onClick={copy}>
-            {copied ? <Check /> : <Copy />} {copied ? 'Copié' : 'Copier le prompt'}
-          </button>
-          <button className="btn btn-secondary" onClick={download}>
-            <Download /> Télécharger
-          </button>
-          <span className="spacer" />
-          <button className="btn btn-ghost" onClick={onEdit}>
-            <PenLine /> Modifier ma demande
-          </button>
-        </div>
-        <div className="cue">
-          {result.sections.map((s, i) => (
-            <div className="cue-row" key={s.title}>
-              <div className="cue-label">
-                <span className="idx">{String(i + 1).padStart(2, '0')}</span>
-                {s.title}
+      <div className="stack">
+        <RenderPanel project={project} update={update} result={result} />
+        <section className="card prompt-card" aria-label="Prompt généré">
+          <div className="prompt-toolbar">
+            <button className="btn btn-primary" onClick={copy}>
+              {copied ? <Check /> : <Copy />} {copied ? 'Copié' : 'Copier le prompt'}
+            </button>
+            <button className="btn btn-secondary" onClick={download}>
+              <Download /> Télécharger
+            </button>
+            <span className="spacer" />
+            <button className="btn btn-ghost" onClick={onEdit}>
+              <PenLine /> Modifier ma demande
+            </button>
+          </div>
+          <div className="cue">
+            {result.sections.map((s, i) => (
+              <div className="cue-row" key={s.title}>
+                <div className="cue-label">
+                  <span className="idx">{String(i + 1).padStart(2, '0')}</span>
+                  {s.title}
+                </div>
+                <div className="cue-body">{s.body}</div>
               </div>
-              <div className="cue-body">{s.body}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      </div>
 
       <aside>
         {result.images.length > 0 && (
@@ -76,11 +83,18 @@ export function StepPrompt({ project, onEdit }: { project: Project; onEdit: () =
 
         <div className="card side-card">
           <h3>Comment l'utiliser</h3>
-          <ol className="howto">
-            <li>Ouvre ChatGPT et choisis la création d'images.</li>
-            <li>{result.images.length ? 'Joins les images dans l’ordre indiqué.' : 'Aucune image à joindre.'}</li>
-            <li>Colle le prompt et envoie.</li>
-          </ol>
+          {settings.imageGenEnabled && settings.openrouterKey ? (
+            <p className="small muted" style={{ margin: 0 }}>
+              Clique sur « Générer le visuel » : le prompt et les images sont envoyés automatiquement, dans le bon ordre. Tu peux aussi
+              copier le prompt pour l'utiliser dans ChatGPT Images.
+            </p>
+          ) : (
+            <ol className="howto">
+              <li>Ouvre ChatGPT et choisis la création d'images.</li>
+              <li>{result.images.length ? 'Joins les images dans l’ordre indiqué.' : 'Aucune image à joindre.'}</li>
+              <li>Colle le prompt et envoie.</li>
+            </ol>
+          )}
         </div>
 
         {result.assumptions.length > 0 && (

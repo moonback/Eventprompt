@@ -9,6 +9,10 @@ export const DEFAULT_SETTINGS: Settings = {
   agencyName: '',
   defaultFormat: '16:9',
   defaultPerspective: 'photo',
+  imageGenEnabled: false,
+  openrouterKey: '',
+  imageModel: 'google/gemini-3.1-flash-image',
+  imageResolution: '2K',
 };
 
 export async function listProjects(): Promise<Project[]> {

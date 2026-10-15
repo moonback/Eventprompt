@@ -49,6 +49,7 @@ export interface Project {
   lastStep: StepKey;
   /** Le prompt a déjà été généré au moins une fois. */
   generated?: boolean;
+  renders?: Render[];
 }
 
 export interface LibraryItem {
@@ -60,8 +61,24 @@ export interface LibraryItem {
   updatedAt: number;
 }
 
+export type ImageResolution = '1K' | '2K' | '4K';
+
 export interface Settings {
   agencyName: string;
   defaultFormat: ImageFormat;
   defaultPerspective: Perspective;
+  /** Génération du visuel via OpenRouter après le prompt. */
+  imageGenEnabled: boolean;
+  openrouterKey: string;
+  imageModel: string;
+  imageResolution: ImageResolution;
+}
+
+/** Visuel généré par l'IA à partir du prompt. */
+export interface Render {
+  id: string;
+  dataUrl: string;
+  createdAt: number;
+  model: string;
+  cost?: number;
 }
